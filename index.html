@@ -1,0 +1,2749 @@
+<!doctype html>
+<html lang="id" class="h-full">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galeri Pro+</title>
+    <script src="/_sdk/element_sdk.js"></script>
+    <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap"
+        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <!-- PWA META -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#6366f1">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    <style>
+        /* ============================================ */
+        /* KONFIGURASI TAILWIND DAN CSS CUSTOM */
+        /* ============================================ */
+        * {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        :root {
+            --galeri-pro-bg-primary: #0f0f0f;
+            --galeri-pro-bg-secondary: #1a1a1a;
+            --galeri-pro-bg-tertiary: #252525;
+            --galeri-pro-text-primary: #ffffff;
+            --galeri-pro-text-secondary: #a0a0a0;
+            --galeri-pro-accent: #6366f1;
+            --galeri-pro-accent-hover: #818cf8;
+            --galeri-pro-border: #333333;
+            --galeri-pro-danger: #ef4444;
+            --galeri-pro-success: #22c55e;
+        }
+
+        /* ============================================ */
+        /* ANIMASI */
+        /* ============================================ */
+        @keyframes galeri-pro-pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+
+            50% {
+                transform: scale(1.1);
+                opacity: 0.7;
+            }
+        }
+
+        @keyframes galeri-pro-spin {
+            from {
+                transform: rotate(0deg);
+            }
+
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes galeri-pro-fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes galeri-pro-slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(100%);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .galeri-pro-animate-pulse {
+            animation: galeri-pro-pulse 1.5s ease-in-out infinite;
+        }
+
+        .galeri-pro-animate-spin {
+            animation: galeri-pro-spin 1s linear infinite;
+        }
+
+        .galeri-pro-animate-fadeIn {
+            animation: galeri-pro-fadeIn 0.5s ease-out forwards;
+        }
+
+        .galeri-pro-animate-slideUp {
+            animation: galeri-pro-slideUp 0.3s ease-out forwards;
+        }
+
+        /* ============================================ */
+        /* STYLING KOMPONEN UTAMA */
+        /* ============================================ */
+        .galeri-pro-app {
+            background: var(--galeri-pro-bg-primary);
+            color: var(--galeri-pro-text-primary);
+            min-height: 100vh;
+        }
+
+        .galeri-pro-sidebar {
+            background: var(--galeri-pro-bg-secondary);
+            border-right: 1px solid var(--galeri-pro-border);
+        }
+
+        .galeri-pro-navbar {
+            background: var(--galeri-pro-bg-secondary);
+            border-top: 1px solid var(--galeri-pro-border);
+        }
+
+        .galeri-pro-card {
+            background: var(--galeri-pro-bg-secondary);
+            border: 1px solid var(--galeri-pro-border);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .galeri-pro-card:hover {
+            border-color: var(--galeri-pro-accent);
+            transform: translateY(-2px);
+        }
+
+        .galeri-pro-btn-primary {
+            background: var(--galeri-pro-accent);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.2s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .galeri-pro-btn-primary:hover {
+            background: var(--galeri-pro-accent-hover);
+        }
+
+        .galeri-pro-btn-secondary {
+            background: var(--galeri-pro-bg-tertiary);
+            color: var(--galeri-pro-text-primary);
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 500;
+            border: 1px solid var(--galeri-pro-border);
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .galeri-pro-btn-secondary:hover {
+            background: var(--galeri-pro-border);
+        }
+
+        .galeri-pro-input {
+            background: var(--galeri-pro-bg-tertiary);
+            border: 1px solid var(--galeri-pro-border);
+            color: var(--galeri-pro-text-primary);
+            padding: 12px 16px;
+            border-radius: 8px;
+            width: 100%;
+            transition: all 0.2s ease;
+        }
+
+        .galeri-pro-input:focus {
+            outline: none;
+            border-color: var(--galeri-pro-accent);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+        }
+
+        .galeri-pro-nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border-radius: 8px;
+            color: var(--galeri-pro-text-secondary);
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .galeri-pro-nav-item:hover {
+            background: var(--galeri-pro-bg-tertiary);
+            color: var(--galeri-pro-text-primary);
+        }
+
+        .galeri-pro-nav-item.active {
+            background: var(--galeri-pro-accent);
+            color: white;
+        }
+
+        .galeri-pro-media-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 8px;
+        }
+
+        @media (min-width: 768px) {
+            .galeri-pro-media-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                gap: 12px;
+            }
+        }
+
+        .galeri-pro-media-item {
+            position: relative;
+            aspect-ratio: 1;
+            border-radius: 8px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .galeri-pro-media-item:hover {
+            transform: scale(1.02);
+        }
+
+        .galeri-pro-media-item img,
+        .galeri-pro-media-item video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .galeri-pro-media-item.selected {
+            border: 3px solid var(--galeri-pro-accent);
+        }
+
+        .galeri-pro-media-item.selected::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(99, 102, 241, 0.2);
+        }
+
+        .galeri-pro-media-item.selected .galeri-pro-check-icon {
+            display: flex;
+        }
+
+        .galeri-pro-check-icon {
+            display: none;
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: var(--galeri-pro-accent);
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+
+        .galeri-pro-modal {
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+        }
+
+        .galeri-pro-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .galeri-pro-scrollbar::-webkit-scrollbar-track {
+            background: var(--galeri-pro-bg-secondary);
+        }
+
+        .galeri-pro-scrollbar::-webkit-scrollbar-thumb {
+            background: var(--galeri-pro-border);
+            border-radius: 3px;
+        }
+
+        .galeri-pro-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: var(--galeri-pro-accent);
+        }
+
+        /* ============================================ */
+        /* TEMA APLIKASI */
+        /* ============================================ */
+        .theme-midnight {
+            --galeri-pro-bg-primary: #0f0f0f;
+            --galeri-pro-bg-secondary: #1a1a1a;
+            --galeri-pro-bg-tertiary: #252525;
+            --galeri-pro-accent: #6366f1;
+            --galeri-pro-accent-hover: #818cf8;
+            --galeri-pro-border: #333333;
+            --galeri-pro-text-primary: #ffffff;
+            --galeri-pro-text-secondary: #a0a0a0;
+        }
+
+        .theme-ocean {
+            --galeri-pro-bg-primary: #0c1929;
+            --galeri-pro-bg-secondary: #132337;
+            --galeri-pro-bg-tertiary: #1a2f4a;
+            --galeri-pro-accent: #0ea5e9;
+            --galeri-pro-accent-hover: #38bdf8;
+            --galeri-pro-border: #1e3a5f;
+            --galeri-pro-text-primary: #f0f9ff;
+            --galeri-pro-text-secondary: #7dd3fc;
+        }
+
+        .theme-forest {
+            --galeri-pro-bg-primary: #0d1f0d;
+            --galeri-pro-bg-secondary: #142814;
+            --galeri-pro-bg-tertiary: #1b351b;
+            --galeri-pro-accent: #22c55e;
+            --galeri-pro-accent-hover: #4ade80;
+            --galeri-pro-border: #2d4a2d;
+            --galeri-pro-text-primary: #f0fdf4;
+            --galeri-pro-text-secondary: #86efac;
+        }
+
+        .theme-sunset {
+            --galeri-pro-bg-primary: #1f1410;
+            --galeri-pro-bg-secondary: #2d1d17;
+            --galeri-pro-bg-tertiary: #3d2820;
+            --galeri-pro-accent: #f97316;
+            --galeri-pro-accent-hover: #fb923c;
+            --galeri-pro-border: #4a3328;
+            --galeri-pro-text-primary: #fff7ed;
+            --galeri-pro-text-secondary: #fdba74;
+        }
+
+        .theme-royal {
+            --galeri-pro-bg-primary: #1a0a2e;
+            --galeri-pro-bg-secondary: #251344;
+            --galeri-pro-bg-tertiary: #311b5a;
+            --galeri-pro-accent: #a855f7;
+            --galeri-pro-accent-hover: #c084fc;
+            --galeri-pro-border: #4c1d95;
+            --galeri-pro-text-primary: #faf5ff;
+            --galeri-pro-text-secondary: #d8b4fe;
+        }
+
+        .theme-cherry {
+            --galeri-pro-bg-primary: #1f0a0a;
+            --galeri-pro-bg-secondary: #2d1212;
+            --galeri-pro-bg-tertiary: #3d1a1a;
+            --galeri-pro-accent: #f43f5e;
+            --galeri-pro-accent-hover: #fb7185;
+            --galeri-pro-border: #5c1f2a;
+            --galeri-pro-text-primary: #fff1f2;
+            --galeri-pro-text-secondary: #fda4af;
+        }
+
+        .theme-snow {
+            --galeri-pro-bg-primary: #f8fafc;
+            --galeri-pro-bg-secondary: #f1f5f9;
+            --galeri-pro-bg-tertiary: #e2e8f0;
+            --galeri-pro-accent: #3b82f6;
+            --galeri-pro-accent-hover: #60a5fa;
+            --galeri-pro-border: #cbd5e1;
+            --galeri-pro-text-primary: #1e293b;
+            --galeri-pro-text-secondary: #64748b;
+        }
+
+        .theme-cream {
+            --galeri-pro-bg-primary: #fefce8;
+            --galeri-pro-bg-secondary: #fef9c3;
+            --galeri-pro-bg-tertiary: #fef08a;
+            --galeri-pro-accent: #ca8a04;
+            --galeri-pro-accent-hover: #eab308;
+            --galeri-pro-border: #d4d4aa;
+            --galeri-pro-text-primary: #422006;
+            --galeri-pro-text-secondary: #854d0e;
+        }
+
+        .theme-mint {
+            --galeri-pro-bg-primary: #ecfdf5;
+            --galeri-pro-bg-secondary: #d1fae5;
+            --galeri-pro-bg-tertiary: #a7f3d0;
+            --galeri-pro-accent: #059669;
+            --galeri-pro-accent-hover: #10b981;
+            --galeri-pro-border: #86efac;
+            --galeri-pro-text-primary: #064e3b;
+            --galeri-pro-text-secondary: #047857;
+        }
+
+        .theme-rose {
+            --galeri-pro-bg-primary: #fff1f2;
+            --galeri-pro-bg-secondary: #ffe4e6;
+            --galeri-pro-bg-tertiary: #fecdd3;
+            --galeri-pro-accent: #e11d48;
+            --galeri-pro-accent-hover: #f43f5e;
+            --galeri-pro-border: #fda4af;
+            --galeri-pro-text-primary: #881337;
+            --galeri-pro-text-secondary: #be123c;
+        }
+
+        .theme-slate {
+            --galeri-pro-bg-primary: #1e293b;
+            --galeri-pro-bg-secondary: #334155;
+            --galeri-pro-bg-tertiary: #475569;
+            --galeri-pro-accent: #94a3b8;
+            --galeri-pro-accent-hover: #cbd5e1;
+            --galeri-pro-border: #64748b;
+            --galeri-pro-text-primary: #f8fafc;
+            --galeri-pro-text-secondary: #e2e8f0;
+        }
+
+        .theme-gold {
+            --galeri-pro-bg-primary: #1c1a10;
+            --galeri-pro-bg-secondary: #2a2714;
+            --galeri-pro-bg-tertiary: #3a3618;
+            --galeri-pro-accent: #fbbf24;
+            --galeri-pro-accent-hover: #fcd34d;
+            --galeri-pro-border: #4a4520;
+            --galeri-pro-text-primary: #fef3c7;
+            --galeri-pro-text-secondary: #fde68a;
+        }
+
+        /* ============================================ */
+        /* UTILITY CLASSES */
+        /* ============================================ */
+        .galeri-pro-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .galeri-pro-media-item:hover .galeri-pro-overlay {
+            opacity: 1;
+        }
+
+        .galeri-pro-video-badge {
+            position: absolute;
+            bottom: 8px;
+            right: 8px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* Pastikan tombol show password selalu di atas */
+        #galeri-pro-toggle-enter-password {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 30;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* Hindari input menutupi icon */
+        .galeri-pro-input {
+            position: relative;
+            z-index: 1;
+        }
+    </style>
+    <style>
+        body {
+            box-sizing: border-box;
+        }
+    </style>
+    <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+</head>
+
+<body class="h-full galeri-pro-app theme-midnight">
+    <!-- ============================================ -->
+    <!-- LOADING SCREEN -->
+    <!-- ============================================ -->
+    <div id="galeri-pro-loading" class="fixed inset-0 z-50 flex flex-col items-center justify-center galeri-pro-app">
+        <div class="flex flex-col items-center gap-6">
+            <div class="relative">
+                <div
+                    class="w-20 h-20 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center galeri-pro-animate-pulse">
+                    <span class="material-icons-round text-4xl text-white">photo_library</span>
+                </div>
+                <div
+                    class="absolute -bottom-2 -right-2 w-8 h-8 rounded-full bg-gradient-to-r from-pink-500 to-rose-500 flex items-center justify-center">
+                    <span class="material-icons-round text-lg text-white">add</span>
+                </div>
+            </div>
+            <div class="text-center">
+                <h1
+                    class="text-2xl font-bold bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">
+                    Galeri Pro+</h1>
+                <p class="text-sm mt-2" style="color: var(--galeri-pro-text-secondary);">Memuat aplikasi...</p>
+            </div>
+            <div class="w-48 h-1 rounded-full overflow-hidden" style="background: var(--galeri-pro-bg-tertiary);">
+                <div id="galeri-pro-loading-bar"
+                    class="h-full rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 transition-all duration-300"
+                    style="width: 0%;"></div>
+            </div>
+        </div>
+    </div>
+    <!-- ============================================ -->
+    <!-- LAYOUT UTAMA -->
+    <!-- ============================================ -->
+    <div id="galeri-pro-main" class="hidden h-full">
+        <div class="flex h-full">
+            <!-- ============================================ -->
+            <!-- SIDEBAR (DESKTOP) -->
+            <!-- ============================================ -->
+            <aside id="galeri-pro-sidebar"
+                class="galeri-pro-sidebar hidden md:flex flex-col w-64 h-full fixed left-0 top-0 z-40"><!-- Logo -->
+                <div class="p-6 border-b" style="border-color: var(--galeri-pro-border);">
+                    <div class="flex items-center gap-3">
+                        <div
+                            class="w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center">
+                            <span class="material-icons-round text-white">photo_library</span>
+                        </div>
+                        <div>
+                            <h1 class="font-bold" id="galeri-pro-app-title">Galeri Pro+</h1>
+                            <p class="text-xs" style="color: var(--galeri-pro-text-secondary);">Media Manager</p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Navigation -->
+                <nav class="flex-1 p-4 overflow-y-auto galeri-pro-scrollbar">
+                    <div class="space-y-2">
+                        <div class="galeri-pro-nav-item active" data-page="home"><span
+                                class="material-icons-round">home</span> <span>Beranda</span>
+                        </div>
+                        <div class="galeri-pro-nav-item" data-page="albums"><span
+                                class="material-icons-round">photo_album</span> <span>Album</span>
+                        </div>
+                    </div>
+                    <div class="mt-6">
+                        <p class="text-xs font-semibold uppercase tracking-wider mb-3 px-4"
+                            style="color: var(--galeri-pro-text-secondary);">Album Lainnya</p>
+                        <div class="space-y-2">
+                            <div class="galeri-pro-nav-item" data-page="hidden"><span
+                                    class="material-icons-round">visibility_off</span> <span>Tersembunyi</span>
+                            </div>
+                            <div class="galeri-pro-nav-item" data-page="trash"><span
+                                    class="material-icons-round">delete</span> <span>Baru Dihapus</span>
+                            </div>
+                        </div>
+                    </div>
+                </nav>
+                <!-- Settings -->
+                <div class="p-4 border-t" style="border-color: var(--galeri-pro-border);">
+                    <div class="galeri-pro-nav-item" data-page="settings"><span
+                            class="material-icons-round">settings</span> <span>Pengaturan</span>
+                    </div>
+                </div>
+            </aside>
+            <!-- ============================================ -->
+            <!-- KONTEN UTAMA -->
+            <!-- ============================================ -->
+            <main id="galeri-pro-content" class="flex-1 md:ml-64 pb-20 md:pb-0 overflow-y-auto galeri-pro-scrollbar"
+                style="height: 100vh;"><!-- ============================================ --> <!-- HALAMAN BERANDA -->
+                <!-- ============================================ -->
+                <div id="galeri-pro-page-home" class="galeri-pro-page p-4 md:p-6"><!-- Header -->
+                    <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+                        <div>
+                            <h2 class="text-2xl font-bold">Galeri Saya</h2>
+                            <p style="color: var(--galeri-pro-text-secondary);" id="galeri-pro-media-count">0 media</p>
+                        </div>
+                        <div class="flex items-center gap-2 w-full md:w-auto"><!-- Upload Button --> <label
+                                class="galeri-pro-btn-primary flex items-center gap-2 cursor-pointer"> <span
+                                    class="material-icons-round">add_photo_alternate</span> <span>Upload</span> <input
+                                    type="file" id="galeri-pro-upload-input" class="hidden" multiple
+                                    accept="image/*,video/*"> </label>
+                            <!-- Filter -->
+                            <select id="galeri-pro-filter" class="galeri-pro-input flex-1 md:flex-none md:w-auto">
+                                <option value="all">Semua Media</option>
+                                <option value="image">Gambar Saja</option>
+                                <option value="video">Video Saja</option>
+                                <option value="newest">Terbaru</option>
+                                <option value="oldest">Terlama</option>
+                            </select>
+                        </div>
+                    </div>
+                    <!-- Multi-select toolbar -->
+                    <!-- Multi-select toolbar -->
+                    <div id="galeri-pro-multiselect-toolbar" class="hidden mb-6 galeri-pro-card p-4 md:p-5
+                    flex flex-col md:flex-row
+                    md:items-center md:justify-between
+                    gap-4 transition-all duration-300">
+
+                        <!-- Info Selected -->
+                        <div class="flex items-center justify-between md:justify-start w-full md:w-auto">
+                            <span class="text-sm md:text-base font-medium">
+                                <span id="galeri-pro-selected-count">0</span> media dipilih
+                            </span>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="grid grid-cols-2 sm:flex gap-2 w-full md:w-auto">
+
+                            <!-- Ke Album -->
+                            <button id="galeri-pro-select-to-album-btn" class="galeri-pro-btn-secondary
+                            flex items-center justify-center gap-2
+                            w-full sm:w-auto">
+                                <span class="material-icons-round">add_to_photos</span>
+                                <span>Ke Album</span>
+                            </button>
+
+                            <!-- Sembunyikan -->
+                            <button id="galeri-pro-select-hide-btn" class="galeri-pro-btn-secondary
+                            flex items-center justify-center gap-2
+                            w-full sm:w-auto">
+                                <span class="material-icons-round">visibility_off</span>
+                                <span>Sembunyikan</span>
+                            </button>
+
+                            <!-- Hapus -->
+                            <button id="galeri-pro-select-delete-btn" class="galeri-pro-btn-secondary
+                            flex items-center justify-center gap-2
+                            col-span-2 sm:col-span-1
+                            w-full sm:w-auto" style="border-color: var(--galeri-pro-danger);
+                            color: var(--galeri-pro-danger);">
+                                <span class="material-icons-round">delete</span>
+                                <span>Hapus</span>
+                            </button>
+
+                            <!-- Batal -->
+                            <button id="galeri-pro-select-cancel-btn" class="galeri-pro-btn-secondary
+                            flex items-center justify-center gap-2
+                            col-span-2 sm:col-span-1
+                            w-full sm:w-auto">
+                                <span class="material-icons-round">close</span>
+                                <span>Batal</span>
+                            </button>
+
+                        </div>
+                    </div>
+                    <!-- Media Groups -->
+                    <div id="galeri-pro-media-container"><!-- Media akan di-render di sini -->
+                    </div><!-- Empty State -->
+                    <div id="galeri-pro-empty-state" class="hidden flex flex-col items-center justify-center py-20">
+                        <div class="w-24 h-24 rounded-full flex items-center justify-center mb-4"
+                            style="background: var(--galeri-pro-bg-tertiary);"><span
+                                class="material-icons-round text-5xl"
+                                style="color: var(--galeri-pro-text-secondary);">photo_library</span>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2">Belum Ada Media</h3>
+                        <p class="text-center max-w-md mb-6" style="color: var(--galeri-pro-text-secondary);">Upload
+                            foto atau video pertama Anda untuk memulai mengorganisir koleksi media Anda.</p><label
+                            class="galeri-pro-btn-primary flex items-center gap-2 cursor-pointer"> <span
+                                class="material-icons-round">cloud_upload</span> <span>Upload Media</span> <input
+                                type="file" class="hidden galeri-pro-upload-trigger" multiple accept="image/*,video/*">
+                        </label>
+                    </div>
+                </div>
+                <!-- ============================================ -->
+                <!-- HALAMAN ALBUM -->
+                <!-- ============================================ -->
+                <div id="galeri-pro-page-albums" class="galeri-pro-page hidden p-4 md:p-6">
+                    <div class="flex items-center justify-between mb-6">
+                        <div>
+                            <h2 class="text-2xl font-bold">Album</h2>
+                            <p style="color: var(--galeri-pro-text-secondary);" id="galeri-pro-album-count">0 album</p>
+                        </div><button id="galeri-pro-create-album-btn"
+                            class="galeri-pro-btn-primary flex items-center gap-2"> <span
+                                class="material-icons-round">add</span> <span>Buat Album</span> </button>
+                    </div>
+                    <div id="galeri-pro-albums-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                        <!-- Album akan di-render di sini -->
+                    </div><!-- Empty Album State -->
+                    <div id="galeri-pro-albums-empty" class="hidden flex flex-col items-center justify-center py-20">
+                        <div class="w-24 h-24 rounded-full flex items-center justify-center mb-4"
+                            style="background: var(--galeri-pro-bg-tertiary);"><span
+                                class="material-icons-round text-5xl"
+                                style="color: var(--galeri-pro-text-secondary);">folder</span>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2">Belum Ada Album</h3>
+                        <p class="text-center max-w-md mb-6" style="color: var(--galeri-pro-text-secondary);">Buat album
+                            pertama Anda untuk mengorganisir foto dan video.</p><button
+                            class="galeri-pro-btn-primary flex items-center gap-2 galeri-pro-create-album-trigger">
+                            <span class="material-icons-round">create_new_folder</span> <span>Buat Album Baru</span>
+                        </button>
+                    </div>
+                </div>
+                <!-- ============================================ -->
+                <!-- HALAMAN DETAIL ALBUM -->
+                <!-- ============================================ -->
+                <div id="galeri-pro-page-album-detail" class="galeri-pro-page hidden p-4 md:p-6">
+                    <div class="flex items-center gap-4 mb-6"><button id="galeri-pro-back-to-albums"
+                            class="p-2 rounded-lg hover:bg-opacity-50"
+                            style="background: var(--galeri-pro-bg-tertiary);"> <span
+                                class="material-icons-round">arrow_back</span> </button>
+                        <div class="flex-1">
+                            <p style="color: var(--galeri-pro-text-secondary);" id="galeri-pro-album-media-count">0
+                                media</p>
+                        </div><button id="galeri-pro-edit-album-btn"
+                            class="galeri-pro-btn-secondary flex items-center gap-2"> <span
+                                class="material-icons-round">edit</span> <span class="hidden md:inline">Edit</span>
+                        </button> <label class="galeri-pro-btn-primary flex items-center gap-2 cursor-pointer"> <span
+                                class="material-icons-round">add</span> <span class="hidden md:inline">Tambah</span>
+                            <input type="file" id="galeri-pro-album-upload" class="hidden" multiple
+                                accept="image/*,video/*"> </label>
+                    </div>
+                    <div id="galeri-pro-album-media-grid" class="galeri-pro-media-grid">
+                        <!-- Media album akan di-render di sini -->
+                    </div>
+                    <div id="galeri-pro-album-empty" class="hidden flex flex-col items-center justify-center py-20">
+                        <div class="w-24 h-24 rounded-full flex items-center justify-center mb-4"
+                            style="background: var(--galeri-pro-bg-tertiary);"><span
+                                class="material-icons-round text-5xl"
+                                style="color: var(--galeri-pro-text-secondary);">photo</span>
+                        </div>
+                        <h3 class="text-xl font-semibold mb-2">Album Kosong</h3>
+                        <p class="text-center max-w-md mb-6" style="color: var(--galeri-pro-text-secondary);">Tambahkan
+                            foto atau video ke album ini.</p>
+                    </div>
+                </div>
+                <!-- ============================================ -->
+                <!-- HALAMAN TERSEMBUNYI (LOGIN) -->
+                <!-- ============================================ -->
+                <div id="galeri-pro-page-hidden" class="galeri-pro-page hidden p-4 md:p-8">
+
+                    <!-- ================= LOGIN CARD ================= -->
+                    <div id="galeri-pro-hidden-login" class="w-full max-w-md mx-auto mt-16 md:mt-24">
+
+                        <div class="galeri-pro-card p-6 md:p-8 text-center">
+
+                            <!-- Icon -->
+                            <div class="w-20 h-20 rounded-full mx-auto flex items-center justify-center mb-6"
+                                style="background: var(--galeri-pro-bg-tertiary);">
+                                <span class="material-icons-round text-4xl" style="color: var(--galeri-pro-accent);">
+                                    lock
+                                </span>
+                            </div>
+
+                            <h2 class="text-2xl font-bold mb-2">Ruang Tersembunyi</h2>
+
+                            <p class="mb-6 text-sm md:text-base" style="color: var(--galeri-pro-text-secondary);">
+                                Masukkan password untuk mengakses media tersembunyi Anda.
+                            </p>
+
+                            <!-- ===== SETUP PASSWORD ===== -->
+                            <div id="galeri-pro-hidden-setup" class="hidden space-y-3">
+
+                                <p class="text-sm" style="color: var(--galeri-pro-text-secondary);">
+                                    Buat password baru untuk ruang tersembunyi:
+                                </p>
+
+                                <input type="password" id="galeri-pro-new-password" class="galeri-pro-input w-full"
+                                    placeholder="Password baru">
+
+                                <input type="password" id="galeri-pro-confirm-password" class="galeri-pro-input w-full"
+                                    placeholder="Konfirmasi password">
+
+                                <button id="galeri-pro-set-password-btn" class="galeri-pro-btn-primary w-full">
+                                    Buat Password
+                                </button>
+                            </div>
+
+                            <!-- ===== ENTER PASSWORD ===== -->
+                            <div id="galeri-pro-hidden-enter" class="space-y-4">
+
+                                <input type="password" id="galeri-pro-enter-password" class="galeri-pro-input w-full"
+                                    placeholder="Masukkan password">
+
+                                <button id="galeri-pro-login-hidden-btn" class="galeri-pro-btn-primary w-full">
+                                    Masuk
+                                </button>
+
+                                <p id="galeri-pro-login-error" class="hidden text-sm"
+                                    style="color: var(--galeri-pro-danger);">
+                                    Password salah!
+                                </p>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- ================= HIDDEN CONTENT ================= -->
+                    <div id="galeri-pro-hidden-content" class="hidden mt-6 md:mt-10">
+
+                        <!-- Header -->
+                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
+
+                            <h2 class="text-2xl font-bold">Tersembunyi</h2>
+
+                            <button id="galeri-pro-logout-hidden"
+                                class="galeri-pro-btn-secondary flex items-center justify-center gap-2 w-full sm:w-auto">
+                                <span class="material-icons-round">logout</span>
+                                <span>Keluar</span>
+                            </button>
+
+                        </div>
+
+                        <!-- Folder Grid -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6 mb-6">
+
+                            <!-- Folder Gambar -->
+                            <div id="galeri-pro-hidden-images-folder" class="galeri-pro-card p-4 md:p-6 cursor-pointer
+                       hover:border-indigo-500 transition-all duration-300
+                       hover:-translate-y-1 min-h-[110px] flex items-center">
+
+                                <div class="flex items-center gap-4 w-full">
+
+                                    <div class="w-14 h-14 shrink-0 rounded-xl
+                                flex items-center justify-center"
+                                        style="background: linear-gradient(135deg, #6366f1, #8b5cf6);">
+                                        <span class="material-icons-round text-2xl text-white">
+                                            image
+                                        </span>
+                                    </div>
+
+                                    <div class="flex-1 min-w-0">
+                                        <h3 class="font-semibold text-base md:text-lg truncate">
+                                            Gambar
+                                        </h3>
+                                        <p id="galeri-pro-hidden-images-count" class="text-sm truncate"
+                                            style="color: var(--galeri-pro-text-secondary);">
+                                            0 gambar
+                                        </p>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <!-- Folder Video -->
+                            <div id="galeri-pro-hidden-videos-folder" class="galeri-pro-card p-4 md:p-6 cursor-pointer
+                       hover:border-indigo-500 transition-all duration-300
+                       hover:-translate-y-1 min-h-[110px] flex items-center">
+
+                                <div class="flex items-center gap-4 w-full">
+
+                                    <div class="w-14 h-14 shrink-0 rounded-xl
+                                flex items-center justify-center"
+                                        style="background: linear-gradient(135deg, #6366f1, #8b5cf6);">
+                                        <span class="material-icons-round text-2xl text-white">
+                                            videocam
+                                        </span>
+                                    </div>
+
+                                    <div class="flex-1 min-w-0">
+                                        <h3 class="font-semibold text-base md:text-lg truncate">
+                                            Video
+                                        </h3>
+                                        <p id="galeri-pro-hidden-videos-count" class="text-sm truncate"
+                                            style="color: var(--galeri-pro-text-secondary);">
+                                            0 video
+                                        </p>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- Folder Media -->
+                        <div id="galeri-pro-hidden-media-container" class="hidden">
+
+                            <div class="flex items-center gap-4 mb-4">
+
+                                <button id="galeri-pro-back-to-hidden-folders" class="p-2 rounded-lg"
+                                    style="background: var(--galeri-pro-bg-tertiary);">
+                                    <span class="material-icons-round">arrow_back</span>
+                                </button>
+
+                                <h3 id="galeri-pro-hidden-folder-title"
+                                    class="text-lg md:text-xl font-semibold truncate">
+                                    Gambar Tersembunyi
+                                </h3>
+
+                            </div>
+
+                            <div id="galeri-pro-hidden-media-grid" class="galeri-pro-media-grid">
+                                <!-- Media tersembunyi dirender di sini -->
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+                <!-- ============================================ -->
+                <!-- HALAMAN BARU DIHAPUS -->
+                <!-- ============================================ -->
+                <div id="galeri-pro-page-trash" class="galeri-pro-page hidden p-4 md:p-8">
+
+                    <!-- ================= HEADER ================= -->
+                    <div class="flex flex-col sm:flex-row 
+                sm:items-center sm:justify-between 
+                gap-4 mb-4">
+
+                        <h2 class="text-2xl font-bold">Baru Dihapus</h2>
+
+                        <button id="galeri-pro-empty-trash-btn" class="galeri-pro-btn-secondary 
+                   flex items-center justify-center gap-2 
+                   w-full sm:w-auto" style="border-color: var(--galeri-pro-danger); 
+                   color: var(--galeri-pro-danger);">
+                            <span class="material-icons-round">delete_forever</span>
+                            <span>Kosongkan</span>
+                        </button>
+                    </div>
+
+                    <!-- ================= DESCRIPTION ================= -->
+                    <p class="text-sm md:text-base text-center max-w-2xl mx-auto mb-6"
+                        style="color: var(--galeri-pro-text-secondary);">
+                        Media yang ada di sini akan terhapus permanen secara otomatis setelah melewati batas waktu 30
+                        hari.
+                    </p>
+
+                    <!-- ================= MULTI SELECT TOOLBAR ================= -->
+                    <div id="galeri-pro-trash-multiselect-toolbar" class="hidden mb-6 galeri-pro-card p-4 md:p-5
+               flex flex-col md:flex-row
+               md:items-center md:justify-between
+               gap-4 transition-all duration-300">
+
+                        <!-- Selected Info -->
+                        <div class="flex items-center justify-between md:justify-start w-full md:w-auto">
+                            <span class="text-sm md:text-base font-medium">
+                                <span id="galeri-pro-trash-selected-count">0</span> media dipilih
+                            </span>
+                        </div>
+
+                        <!-- Actions -->
+                        <div class="grid grid-cols-2 sm:flex gap-2 w-full md:w-auto">
+
+                            <!-- Restore -->
+                            <button id="galeri-pro-trash-restore-btn" class="galeri-pro-btn-secondary 
+                       flex items-center justify-center gap-2 
+                       w-full sm:w-auto">
+                                <span class="material-icons-round">restore</span>
+                                <span>Pulihkan</span>
+                            </button>
+
+                            <!-- Permanent Delete -->
+                            <button id="galeri-pro-trash-delete-btn" class="galeri-pro-btn-secondary 
+                       flex items-center justify-center gap-2 
+                       w-full sm:w-auto" style="border-color: var(--galeri-pro-danger); 
+                       color: var(--galeri-pro-danger);">
+                                <span class="material-icons-round">delete_forever</span>
+                                <span>Hapus</span>
+                            </button>
+
+                            <!-- Cancel -->
+                            <button id="galeri-pro-trash-cancel-btn" class="galeri-pro-btn-secondary 
+                       flex items-center justify-center gap-2 
+                       col-span-2 sm:col-span-1
+                       w-full sm:w-auto">
+                                <span class="material-icons-round">close</span>
+                                <span>Batal</span>
+                            </button>
+
+                        </div>
+                    </div>
+
+                    <!-- ================= GRID ================= -->
+                    <div id="galeri-pro-trash-grid" class="galeri-pro-media-grid mb-6">
+                        <!-- Media terhapus akan di-render di sini -->
+                    </div>
+
+                    <!-- ================= EMPTY STATE ================= -->
+                    <div id="galeri-pro-trash-empty"
+                        class="hidden flex flex-col items-center justify-center text-center py-20">
+
+                        <div class="w-24 h-24 rounded-full flex items-center justify-center mb-4"
+                            style="background: var(--galeri-pro-bg-tertiary);">
+                            <span class="material-icons-round text-5xl"
+                                style="color: var(--galeri-pro-text-secondary);">
+                                delete_outline
+                            </span>
+                        </div>
+
+                        <h3 class="text-xl font-semibold mb-2">Sampah Kosong</h3>
+
+                        <p class="max-w-md" style="color: var(--galeri-pro-text-secondary);">
+                            Tidak ada media yang baru dihapus.
+                        </p>
+
+                    </div>
+                </div>
+                <!-- ============================================ -->
+                <!-- HALAMAN PENGATURAN -->
+                <!-- ============================================ -->
+                <div id="galeri-pro-page-settings" class="galeri-pro-page hidden p-4 md:p-6">
+                    <h2 class="text-2xl font-bold mb-6">Pengaturan</h2><!-- Tema -->
+                    <div class="galeri-pro-card p-6 mb-6">
+                        <h3 class="text-lg font-semibold mb-4 flex items-center gap-2"><span
+                                class="material-icons-round">palette</span> Pilih Tema</h3>
+                        <div class="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-3" id="galeri-pro-theme-grid">
+                            <!-- Tema akan di-render di sini -->
+                        </div>
+                    </div><!-- Informasi Aplikasi -->
+                    <div class="galeri-pro-card p-6">
+                        <h3 class="text-lg font-semibold mb-4 flex items-center gap-2"><span
+                                class="material-icons-round">info</span> Informasi Aplikasi</h3>
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between py-3 border-b"
+                                style="border-color: var(--galeri-pro-border);"><span
+                                    style="color: var(--galeri-pro-text-secondary);">Nama Aplikasi</span> <span
+                                    class="font-medium">Galeri Pro+</span>
+                            </div>
+                            <div class="flex items-center justify-between py-3 border-b"
+                                style="border-color: var(--galeri-pro-border);"><span
+                                    style="color: var(--galeri-pro-text-secondary);">Versi</span> <span
+                                    class="font-medium">1.0.0</span>
+                            </div>
+                            <div class="flex items-center justify-between py-3 border-b"
+                                style="border-color: var(--galeri-pro-border);"><span
+                                    style="color: var(--galeri-pro-text-secondary);">Pengembang</span> <span
+                                    class="font-medium">zeapplefjx_dika</span>
+                            </div>
+                            <div class="flex items-center justify-between py-3 border-b"
+                                style="border-color: var(--galeri-pro-border);"><span
+                                    style="color: var(--galeri-pro-text-secondary);">Penyimpanan</span> <span
+                                    class="font-medium" id="galeri-pro-storage-info">IndexedDB</span>
+                            </div>
+                            <div class="flex items-center justify-between py-3"><span
+                                    style="color: var(--galeri-pro-text-secondary);">Total Media</span> <span
+                                    class="font-medium" id="galeri-pro-total-media-info">0</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div><!-- ============================================ --> <!-- BOTTOM NAVBAR (MOBILE) -->
+        <!-- ============================================ -->
+        <nav id="galeri-pro-bottom-nav" class="galeri-pro-navbar fixed bottom-0 left-0 right-0 md:hidden z-40">
+            <div class="flex items-center justify-around py-2">
+                <div class="galeri-pro-mobile-nav-item flex flex-col items-center p-2 cursor-pointer active"
+                    data-page="home"><span class="material-icons-round">home</span> <span
+                        class="text-xs mt-1">Beranda</span>
+                </div>
+                <div class="galeri-pro-mobile-nav-item flex flex-col items-center p-2 cursor-pointer"
+                    data-page="albums"><span class="material-icons-round">photo_album</span> <span
+                        class="text-xs mt-1">Album</span>
+                </div>
+                <div class="galeri-pro-mobile-nav-item flex flex-col items-center p-2 cursor-pointer"
+                    data-page="hidden"><span class="material-icons-round">visibility_off</span> <span
+                        class="text-xs mt-1">Sembunyi</span>
+                </div>
+                <div class="galeri-pro-mobile-nav-item flex flex-col items-center p-2 cursor-pointer" data-page="trash">
+                    <span class="material-icons-round">delete</span> <span class="text-xs mt-1">Sampah</span>
+                </div>
+                <div class="galeri-pro-mobile-nav-item flex flex-col items-center p-2 cursor-pointer"
+                    data-page="settings"><span class="material-icons-round">settings</span> <span
+                        class="text-xs mt-1">Pengaturan</span>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <!-- ============================================ -->
+    <!-- MODAL PREVIEW MEDIA -->
+    <!-- ============================================ -->
+    <div id="galeri-pro-preview-modal" class="fixed inset-0 z-50 hidden galeri-pro-modal
+           flex items-center justify-center p-4 md:p-6">
+
+        <!-- Backdrop -->
+        <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" id="galeri-pro-preview-backdrop"></div>
+
+        <!-- Modal Container -->
+        <div class="relative w-full max-w-6xl
+                max-h-[90vh]
+                flex flex-col
+                galeri-pro-animate-fadeIn">
+
+            <!-- Close Button -->
+            <button id="galeri-pro-close-preview" class="absolute top-4 right-4 z-20
+                   p-2 rounded-full
+                   flex items-center justify-center" style="background: rgba(0,0,0,0.6);">
+
+                <span class="material-icons-round text-white">
+                    close
+                </span>
+            </button>
+
+            <!-- Preview Content -->
+            <div id="galeri-pro-preview-content" class="relative flex-1
+                   flex items-center justify-center
+                   rounded-xl overflow-hidden
+                   bg-black">
+
+                <!-- Preview content here -->
+
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="mt-4
+                    flex flex-wrap
+                    items-center justify-center
+                    gap-3 md:gap-4">
+
+                <button id="galeri-pro-preview-hide" class="galeri-pro-btn-secondary
+                       flex items-center justify-center gap-2
+                       min-w-[48px] h-11 px-4">
+                    <span class="material-icons-round">
+                        visibility_off
+                    </span>
+                </button>
+
+                <button id="galeri-pro-preview-add-album" class="galeri-pro-btn-secondary
+                       flex items-center justify-center gap-2
+                       min-w-[48px] h-11 px-4">
+                    <span class="material-icons-round">
+                        add_to_photos
+                    </span>
+                </button>
+
+                <button id="galeri-pro-preview-delete" class="galeri-pro-btn-secondary
+                       flex items-center justify-center gap-2
+                       min-w-[48px] h-11 px-4" style="border-color: var(--galeri-pro-danger);
+                       color: var(--galeri-pro-danger);">
+                    <span class="material-icons-round">
+                        delete
+                    </span>
+                </button>
+
+                <button id="galeri-pro-preview-download" class="galeri-pro-btn-secondary
+                       flex items-center justify-center gap-2
+                       min-w-[48px] h-11 px-4">
+                    <span class="material-icons-round">
+                        download
+                    </span>
+                </button>
+
+            </div>
+
+        </div>
+    </div>
+    <!-- ============================================ -->
+    <!-- MODAL BUAT/EDIT ALBUM -->
+    <!-- ============================================ -->
+    <div id="galeri-pro-album-modal"
+        class="fixed inset-0 z-50 hidden galeri-pro-modal flex items-center justify-center p-4">
+        <div class="absolute inset-0" id="galeri-pro-album-modal-backdrop"></div>
+        <div class="galeri-pro-card p-6 w-full max-w-md relative galeri-pro-animate-slideUp">
+            <h3 class="text-xl font-bold mb-4" id="galeri-pro-album-modal-title">Buat Album Baru</h3><input type="text"
+                id="galeri-pro-album-name-input" class="galeri-pro-input mb-4" placeholder="Nama album">
+            <div class="flex gap-3"><button id="galeri-pro-album-modal-cancel"
+                    class="galeri-pro-btn-secondary flex-1">Batal</button> <button id="galeri-pro-album-modal-save"
+                    class="galeri-pro-btn-primary flex-1">Simpan</button>
+            </div>
+        </div>
+    </div>
+    <!-- ============================================ -->
+    <!-- MODAL EDIT/HAPUS ALBUM -->
+    <!-- ============================================ -->
+    <div id="galeri-pro-album-edit-modal"
+        class="fixed inset-0 z-50 hidden galeri-pro-modal flex items-center justify-center p-4">
+        <div class="absolute inset-0" id="galeri-pro-album-edit-backdrop"></div>
+        <div class="galeri-pro-card p-6 w-full max-w-md relative galeri-pro-animate-slideUp">
+            <h3 class="text-xl font-bold mb-4">Edit Album</h3><input type="text" id="galeri-pro-album-edit-name"
+                class="galeri-pro-input mb-4" placeholder="Nama album">
+            <div class="flex flex-col gap-3">
+                <div class="flex gap-3"><button id="galeri-pro-album-edit-cancel"
+                        class="galeri-pro-btn-secondary flex-1">Batal</button> <button id="galeri-pro-album-edit-save"
+                        class="galeri-pro-btn-primary flex-1">Simpan</button>
+                </div><button id="galeri-pro-album-delete-btn"
+                    class="galeri-pro-btn-secondary flex items-center justify-center gap-2"
+                    style="border-color: var(--galeri-pro-danger); color: var(--galeri-pro-danger);"> <span
+                        class="material-icons-round">delete</span> <span>Hapus Album</span> </button>
+            </div>
+        </div>
+    </div>
+    <!-- ============================================ -->
+    <!-- MODAL PILIH ALBUM -->
+    <!-- ============================================ -->
+    <div id="galeri-pro-select-album-modal"
+        class="fixed inset-0 z-50 hidden galeri-pro-modal flex items-center justify-center p-4">
+        <div class="absolute inset-0" id="galeri-pro-select-album-backdrop"></div>
+        <div
+            class="galeri-pro-card p-6 w-full max-w-md relative galeri-pro-animate-slideUp max-h-96 overflow-y-auto galeri-pro-scrollbar">
+            <h3 class="text-xl font-bold mb-4">Pilih Album</h3>
+            <div id="galeri-pro-select-album-list" class="space-y-2"><!-- Album list -->
+            </div><button id="galeri-pro-select-album-cancel"
+                class="galeri-pro-btn-secondary w-full mt-4">Batal</button>
+        </div>
+    </div>
+    <!-- ============================================ -->
+    <!-- MODAL KONFIRMASI -->
+    <!-- ============================================ -->
+    <div id="galeri-pro-confirm-modal"
+        class="fixed inset-0 z-50 hidden galeri-pro-modal flex items-center justify-center p-4">
+        <div class="absolute inset-0" id="galeri-pro-confirm-backdrop"></div>
+        <div class="galeri-pro-card p-6 w-full max-w-sm relative galeri-pro-animate-slideUp text-center">
+            <div class="w-16 h-16 rounded-full mx-auto flex items-center justify-center mb-4"
+                style="background: rgba(239, 68, 68, 0.1);"><span class="material-icons-round text-3xl"
+                    style="color: var(--galeri-pro-danger);">warning</span>
+            </div>
+            <h3 class="text-xl font-bold mb-2" id="galeri-pro-confirm-title">Konfirmasi</h3>
+            <p class="mb-6" style="color: var(--galeri-pro-text-secondary);" id="galeri-pro-confirm-message">Apakah Anda
+                yakin?</p>
+            <div class="flex gap-3"><button id="galeri-pro-confirm-cancel"
+                    class="galeri-pro-btn-secondary flex-1">Batal</button> <button id="galeri-pro-confirm-ok"
+                    class="galeri-pro-btn-primary flex-1" style="background: var(--galeri-pro-danger);">Hapus</button>
+            </div>
+        </div>
+    </div>
+    <!-- ============================================ -->
+    <!-- TOAST NOTIFICATION -->
+    <!-- ============================================ -->
+    <div id="galeri-pro-toast" class="fixed bottom-6 md:bottom-8 left-1/2 -translate-x-1/2 
+            w-[92%] max-w-md
+            z-[9999] hidden 
+            transition-all duration-300
+            opacity-0 translate-y-4">
+
+        <div class="galeri-pro-card 
+                px-4 md:px-6 py-3 
+                flex items-center gap-3 
+                shadow-xl backdrop-blur-md">
+
+            <span class="material-icons-round text-xl shrink-0" id="galeri-pro-toast-icon">
+                check_circle
+            </span>
+
+            <span id="galeri-pro-toast-message" class="flex-1 text-sm md:text-base break-words">
+                Berhasil!
+            </span>
+
+        </div>
+    </div>
+    <div id="pwa-install-modal" class="fixed inset-0 bg-black/50 hidden 
+            flex items-center justify-center z-[9999]">
+
+        <div class="galeri-pro-card p-6 w-[90%] max-w-sm text-center space-y-4">
+
+            <h3 class="text-lg font-semibold">
+                Install Galeri Pro+
+            </h3>
+
+            <p class="text-sm opacity-70">
+                Tambahkan aplikasi ke layar utama untuk pengalaman penuh.
+            </p>
+
+            <div class="flex gap-3 justify-center">
+
+                <button onclick="installPWA()" class="galeri-pro-btn-primary px-4 py-2">
+                    Install
+                </button>
+
+                <button onclick="document.getElementById('pwa-install-modal').classList.add('hidden')"
+                    class="galeri-pro-btn-secondary px-4 py-2">
+                    Nanti
+                </button>
+
+            </div>
+        </div>
+    </div>
+    <script>
+        /* ============================================ */
+        /* INISIALISASI DATABASE INDEXEDDB */
+        /* ============================================ */
+
+        const DB_NAME = 'GaleriProDB';
+        const DB_VERSION = 1;
+        let db = null;
+
+        function openDatabase() {
+            return new Promise((resolve, reject) => {
+                const request = indexedDB.open(DB_NAME, DB_VERSION);
+
+                request.onerror = () => reject(request.error);
+                request.onsuccess = () => {
+                    db = request.result;
+                    resolve(db);
+                };
+
+                request.onupgradeneeded = (event) => {
+                    const database = event.target.result;
+
+                    if (!database.objectStoreNames.contains('media')) {
+                        const mediaStore = database.createObjectStore('media', { keyPath: 'id' });
+                        mediaStore.createIndex('type', 'type', { unique: false });
+                        mediaStore.createIndex('createdAt', 'createdAt', { unique: false });
+                        mediaStore.createIndex('albumId', 'albumId', { unique: false });
+                    }
+
+                    if (!database.objectStoreNames.contains('albums')) {
+                        const albumStore = database.createObjectStore('albums', { keyPath: 'id' });
+                        albumStore.createIndex('createdAt', 'createdAt', { unique: false });
+                    }
+
+                    if (!database.objectStoreNames.contains('hidden')) {
+                        const hiddenStore = database.createObjectStore('hidden', { keyPath: 'id' });
+                        hiddenStore.createIndex('type', 'type', { unique: false });
+                    }
+
+                    if (!database.objectStoreNames.contains('trash')) {
+                        const trashStore = database.createObjectStore('trash', { keyPath: 'id' });
+                        trashStore.createIndex('deletedAt', 'deletedAt', { unique: false });
+                    }
+
+                    if (!database.objectStoreNames.contains('settings')) {
+                        database.createObjectStore('settings', { keyPath: 'key' });
+                    }
+                };
+            });
+        }
+
+        /* ============================================ */
+        /* FUNGSI DATABASE HELPER */
+        /* ============================================ */
+
+        function addToStore(storeName, data) {
+            return new Promise((resolve, reject) => {
+                const transaction = db.transaction(storeName, 'readwrite');
+                const store = transaction.objectStore(storeName);
+                const request = store.add(data);
+                request.onsuccess = () => resolve(request.result);
+                request.onerror = () => reject(request.error);
+            });
+        }
+
+        function updateInStore(storeName, data) {
+            return new Promise((resolve, reject) => {
+                const transaction = db.transaction(storeName, 'readwrite');
+                const store = transaction.objectStore(storeName);
+                const request = store.put(data);
+                request.onsuccess = () => resolve(request.result);
+                request.onerror = () => reject(request.error);
+            });
+        }
+
+        function deleteFromStore(storeName, id) {
+            return new Promise((resolve, reject) => {
+                const transaction = db.transaction(storeName, 'readwrite');
+                const store = transaction.objectStore(storeName);
+                const request = store.delete(id);
+                request.onsuccess = () => resolve();
+                request.onerror = () => reject(request.error);
+            });
+        }
+
+        function getAllFromStore(storeName) {
+            return new Promise((resolve, reject) => {
+                const transaction = db.transaction(storeName, 'readonly');
+                const store = transaction.objectStore(storeName);
+                const request = store.getAll();
+                request.onsuccess = () => resolve(request.result);
+                request.onerror = () => reject(request.error);
+            });
+        }
+
+        function getFromStore(storeName, id) {
+            return new Promise((resolve, reject) => {
+                const transaction = db.transaction(storeName, 'readonly');
+                const store = transaction.objectStore(storeName);
+                const request = store.get(id);
+                request.onsuccess = () => resolve(request.result);
+                request.onerror = () => reject(request.error);
+            });
+        }
+
+        function getSetting(key) {
+            return new Promise((resolve, reject) => {
+                const transaction = db.transaction('settings', 'readonly');
+                const store = transaction.objectStore('settings');
+                const request = store.get(key);
+                request.onsuccess = () => resolve(request.result?.value);
+                request.onerror = () => reject(request.error);
+            });
+        }
+
+        function setSetting(key, value) {
+            return new Promise((resolve, reject) => {
+                const transaction = db.transaction('settings', 'readwrite');
+                const store = transaction.objectStore('settings');
+                const request = store.put({ key, value });
+                request.onsuccess = () => resolve();
+                request.onerror = () => reject(request.error);
+            });
+        }
+
+        /* ============================================ */
+        /* VARIABEL GLOBAL DAN STATE */
+        /* ============================================ */
+
+        let currentPage = 'home';
+        let currentAlbumId = null;
+        let currentPreviewMedia = null;
+        let hiddenLoggedIn = false;
+        let currentHiddenFolder = null;
+        let editingAlbumId = null;
+        let confirmCallback = null;
+        let multiSelectMode = false;
+        let selectedMediaIds = new Set();
+        let longPressTimer = null;
+        let currentMultiSelectPage = null;
+        let trashMultiSelectMode = false;
+        let selectedTrashIds = new Set();
+
+        const themes = [
+            { id: 'midnight', name: 'Midnight', colors: ['#0f0f0f', '#6366f1'] },
+            { id: 'ocean', name: 'Ocean', colors: ['#0c1929', '#0ea5e9'] },
+            { id: 'forest', name: 'Forest', colors: ['#0d1f0d', '#22c55e'] },
+            { id: 'sunset', name: 'Sunset', colors: ['#1f1410', '#f97316'] },
+            { id: 'royal', name: 'Royal', colors: ['#1a0a2e', '#a855f7'] },
+            { id: 'cherry', name: 'Cherry', colors: ['#1f0a0a', '#f43f5e'] },
+            { id: 'snow', name: 'Snow', colors: ['#f8fafc', '#3b82f6'] },
+            { id: 'cream', name: 'Cream', colors: ['#fefce8', '#ca8a04'] },
+            { id: 'mint', name: 'Mint', colors: ['#ecfdf5', '#059669'] },
+            { id: 'rose', name: 'Rose', colors: ['#fff1f2', '#e11d48'] },
+            { id: 'slate', name: 'Slate', colors: ['#1e293b', '#94a3b8'] },
+            { id: 'gold', name: 'Gold', colors: ['#1c1a10', '#fbbf24'] }
+        ];
+
+        /* ============================================ */
+        /* FUNGSI UTILITAS */
+        /* ============================================ */
+
+        function generateId() {
+            return Date.now().toString(36) + Math.random().toString(36).substr(2);
+        }
+
+        function formatDate(timestamp) {
+            const date = new Date(timestamp);
+            const now = new Date();
+            const yesterday = new Date(now);
+            yesterday.setDate(yesterday.getDate() - 1);
+
+            if (date.toDateString() === now.toDateString()) {
+                return 'Hari Ini';
+            } else if (date.toDateString() === yesterday.toDateString()) {
+                return 'Kemarin';
+            } else {
+                const options = { day: 'numeric', month: 'long', year: 'numeric' };
+                return date.toLocaleDateString('id-ID', options);
+            }
+        }
+
+        function daysUntilDelete(deletedAt) {
+            const deleteDate = new Date(deletedAt);
+            deleteDate.setDate(deleteDate.getDate() + 30);
+            const now = new Date();
+            const diff = Math.ceil((deleteDate - now) / (1000 * 60 * 60 * 24));
+            return Math.max(0, diff);
+        }
+
+        let galeriProToastTimeout;
+
+        function showToast(message, type = 'success') {
+
+            const toast = document.getElementById('galeri-pro-toast');
+            const icon = document.getElementById('galeri-pro-toast-icon');
+            const msg = document.getElementById('galeri-pro-toast-message');
+
+            if (!toast) return;
+
+            // Reset timer jika dipanggil lagi
+            if (galeriProToastTimeout) {
+                clearTimeout(galeriProToastTimeout);
+            }
+
+            // Set icon
+            icon.textContent =
+                type === 'success' ? 'check_circle' :
+                    type === 'error' ? 'error' :
+                        'info';
+
+            // Set warna icon
+            icon.style.color =
+                type === 'success' ? 'var(--galeri-pro-success)' :
+                    type === 'error' ? 'var(--galeri-pro-danger)' :
+                        'var(--galeri-pro-accent)';
+
+            msg.textContent = message;
+
+            // Tampilkan toast
+            toast.classList.remove('hidden');
+
+            requestAnimationFrame(() => {
+                toast.classList.remove('opacity-0', 'translate-y-4');
+                toast.classList.add('opacity-100', 'translate-y-0');
+            });
+
+            // Auto hide
+            galeriProToastTimeout = setTimeout(() => {
+                toast.classList.remove('opacity-100');
+                toast.classList.add('opacity-0', 'translate-y-4');
+
+                setTimeout(() => {
+                    toast.classList.add('hidden');
+                }, 300);
+
+            }, 3000);
+        }
+
+        function showConfirm(title, message, callback) {
+            document.getElementById('galeri-pro-confirm-title').textContent = title;
+            document.getElementById('galeri-pro-confirm-message').textContent = message;
+            document.getElementById('galeri-pro-confirm-modal').classList.remove('hidden');
+            confirmCallback = callback;
+        }
+
+        /* ============================================ */
+        /* FUNGSI NAVIGASI */
+        /* ============================================ */
+
+        function navigateTo(page) {
+            document.querySelectorAll('.galeri-pro-page').forEach(p => p.classList.add('hidden'));
+
+            document.querySelectorAll('.galeri-pro-nav-item').forEach(item => {
+                item.classList.remove('active');
+                if (item.dataset.page === page) item.classList.add('active');
+            });
+
+            document.querySelectorAll('.galeri-pro-mobile-nav-item').forEach(item => {
+                item.classList.remove('active');
+                item.style.color = 'var(--galeri-pro-text-secondary)';
+                if (item.dataset.page === page) {
+                    item.classList.add('active');
+                    item.style.color = 'var(--galeri-pro-accent)';
+                }
+            });
+
+            const pageEl = document.getElementById(`galeri-pro-page-${page}`);
+            if (pageEl) {
+                pageEl.classList.remove('hidden');
+                currentPage = page;
+            }
+
+            if (page === 'home') loadHomeMedia();
+            else if (page === 'albums') loadAlbums();
+            else if (page === 'hidden') checkHiddenAccess();
+            else if (page === 'trash') loadTrash();
+            else if (page === 'settings') loadSettings();
+        }
+
+        /* ============================================ */
+        /* FUNGSI UPLOAD MEDIA */
+        /* ============================================ */
+
+        async function handleUpload(files, albumId = null, isHidden = false) {
+            for (const file of files) {
+                const reader = new FileReader();
+                reader.onload = async (e) => {
+                    const mediaData = {
+                        id: generateId(),
+                        name: file.name,
+                        type: file.type.startsWith('image') ? 'image' : 'video',
+                        data: e.target.result,
+                        size: file.size,
+                        createdAt: Date.now(),
+                        albumId: albumId
+                    };
+
+                    if (isHidden) {
+                        await addToStore('hidden', mediaData);
+                    } else {
+                        await addToStore('media', mediaData);
+                    }
+
+                    showToast(`${file.name} berhasil diupload`);
+
+                    if (currentPage === 'home') loadHomeMedia();
+                    else if (currentPage === 'album-detail') loadAlbumDetail(currentAlbumId);
+                    else if (isHidden) loadHiddenMedia(currentHiddenFolder);
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        /* ============================================ */
+        /* FUNGSI HALAMAN BERANDA */
+        /* ============================================ */
+
+        async function loadHomeMedia() {
+            const container = document.getElementById('galeri-pro-media-container');
+            const emptyState = document.getElementById('galeri-pro-empty-state');
+            const countEl = document.getElementById('galeri-pro-media-count');
+            const filter = document.getElementById('galeri-pro-filter').value;
+
+            let media = await getAllFromStore('media');
+
+            if (filter === 'image') {
+                media = media.filter(m => m.type === 'image');
+            } else if (filter === 'video') {
+                media = media.filter(m => m.type === 'video');
+            }
+
+            if (filter === 'oldest') {
+                media.sort((a, b) => a.createdAt - b.createdAt);
+            } else {
+                media.sort((a, b) => b.createdAt - a.createdAt);
+            }
+
+            countEl.textContent = `${media.length} media`;
+
+            if (media.length === 0) {
+                container.innerHTML = '';
+                emptyState.classList.remove('hidden');
+                return;
+            }
+
+            emptyState.classList.add('hidden');
+
+            const groups = {};
+            media.forEach(item => {
+                const dateKey = formatDate(item.createdAt);
+                if (!groups[dateKey]) groups[dateKey] = [];
+                groups[dateKey].push(item);
+            });
+
+            let html = '';
+            for (const [date, items] of Object.entries(groups)) {
+                html += `
+                    <div class="mb-8">
+                        <h3 class="text-lg font-semibold mb-4">${date}</h3>
+                        <div class="galeri-pro-media-grid">
+                            ${items.map(item => renderMediaItem(item)).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+
+            container.innerHTML = html;
+            attachMediaClickHandlers();
+        }
+
+        function renderMediaItem(item, showDaysLeft = false) {
+            const isVideo = item.type === 'video';
+            const daysLeft = showDaysLeft ? daysUntilDelete(item.deletedAt) : null;
+            const isSelected = multiSelectMode && selectedMediaIds.has(item.id);
+            const isTrashSelected = trashMultiSelectMode && selectedTrashIds.has(item.id);
+
+            return `
+                <div class="galeri-pro-media-item ${isSelected || isTrashSelected ? 'selected' : ''}" data-id="${item.id}">
+                    ${isVideo
+                    ? `<video src="${item.data}" muted></video>`
+                    : `<img src="${item.data}" alt="${item.name}" loading="lazy">`
+                }
+                    <div class="galeri-pro-overlay"></div>
+                    <div class="galeri-pro-check-icon">
+                        <span class="material-icons-round text-white">check</span>
+                    </div>
+                    ${isVideo ? `
+                        <div class="galeri-pro-video-badge">
+                            <span class="material-icons-round text-sm">play_arrow</span>
+                        </div>
+                    ` : ''}
+                    ${showDaysLeft ? `
+                        <div class="absolute top-2 right-2 bg-black/70 px-2 py-1 rounded text-xs">
+                            ${daysLeft} hari lagi
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+        }
+
+        function attachMediaClickHandlers() {
+            document.querySelectorAll('.galeri-pro-media-item').forEach(item => {
+                let pressTimer;
+
+                item.addEventListener('mousedown', () => {
+                    pressTimer = setTimeout(() => {
+                        startMultiSelect(item.dataset.id);
+                    }, 3000);
+                });
+
+                item.addEventListener('mouseup', () => {
+                    clearTimeout(pressTimer);
+                });
+
+                item.addEventListener('mouseleave', () => {
+                    clearTimeout(pressTimer);
+                });
+
+                item.addEventListener('touchstart', () => {
+                    pressTimer = setTimeout(() => {
+                        startMultiSelect(item.dataset.id);
+                    }, 3000);
+                });
+
+                item.addEventListener('touchend', () => {
+                    clearTimeout(pressTimer);
+                });
+
+                item.addEventListener('click', (e) => {
+                    if (multiSelectMode) {
+                        e.stopPropagation();
+                        toggleMediaSelection(item.dataset.id);
+                    } else if (trashMultiSelectMode) {
+                        e.stopPropagation();
+                        toggleTrashSelection(item.dataset.id);
+                    } else {
+                        openPreview(item.dataset.id);
+                    }
+                });
+            });
+        }
+
+        function startMultiSelect(mediaId) {
+            currentMultiSelectPage = currentPage;
+            if (currentPage === 'trash') {
+                trashMultiSelectMode = true;
+                selectedTrashIds.add(mediaId);
+                updateTrashMultiselectToolbar();
+            } else {
+                multiSelectMode = true;
+                selectedMediaIds.add(mediaId);
+                updateMultiselectToolbar();
+            }
+            refreshMediaDisplay();
+        }
+
+        function toggleMediaSelection(mediaId) {
+            if (selectedMediaIds.has(mediaId)) {
+                selectedMediaIds.delete(mediaId);
+            } else {
+                selectedMediaIds.add(mediaId);
+            }
+
+            if (selectedMediaIds.size === 0) {
+                multiSelectMode = false;
+                document.getElementById('galeri-pro-multiselect-toolbar').classList.add('hidden');
+            }
+
+            updateMultiselectToolbar();
+            refreshMediaDisplay();
+        }
+
+        function toggleTrashSelection(mediaId) {
+            if (selectedTrashIds.has(mediaId)) {
+                selectedTrashIds.delete(mediaId);
+            } else {
+                selectedTrashIds.add(mediaId);
+            }
+
+            if (selectedTrashIds.size === 0) {
+                trashMultiSelectMode = false;
+                document.getElementById('galeri-pro-trash-multiselect-toolbar').classList.add('hidden');
+            }
+
+            updateTrashMultiselectToolbar();
+            refreshMediaDisplay();
+        }
+
+        function updateMultiselectToolbar() {
+            const toolbar = document.getElementById('galeri-pro-multiselect-toolbar');
+            if (selectedMediaIds.size === 0) {
+                toolbar.classList.add('hidden');
+            } else {
+                toolbar.classList.remove('hidden');
+                document.getElementById('galeri-pro-selected-count').textContent = selectedMediaIds.size;
+            }
+        }
+
+        function updateTrashMultiselectToolbar() {
+            const toolbar = document.getElementById('galeri-pro-trash-multiselect-toolbar');
+            if (selectedTrashIds.size === 0) {
+                toolbar.classList.add('hidden');
+            } else {
+                toolbar.classList.remove('hidden');
+                document.getElementById('galeri-pro-trash-selected-count').textContent = selectedTrashIds.size;
+            }
+        }
+
+        function cancelMultiSelect() {
+            multiSelectMode = false;
+            selectedMediaIds.clear();
+            document.getElementById('galeri-pro-multiselect-toolbar').classList.add('hidden');
+            refreshMediaDisplay();
+        }
+
+        function cancelTrashMultiSelect() {
+            trashMultiSelectMode = false;
+            selectedTrashIds.clear();
+            document.getElementById('galeri-pro-trash-multiselect-toolbar').classList.add('hidden');
+            refreshMediaDisplay();
+        }
+
+        function refreshMediaDisplay() {
+            if (currentPage === 'home') {
+                loadHomeMedia();
+            } else if (currentPage === 'trash') {
+                loadTrash();
+            }
+        }
+
+        /* ============================================ */
+        /* EVENT LISTENER MULTI-SELECT TOOLBAR */
+        /* ============================================ */
+
+        function initMultiSelectToolbarEvents() {
+
+            const toAlbumBtn = document.getElementById('galeri-pro-select-to-album-btn');
+            const hideBtn = document.getElementById('galeri-pro-select-hide-btn');
+            const deleteBtn = document.getElementById('galeri-pro-select-delete-btn');
+            const cancelBtn = document.getElementById('galeri-pro-select-cancel-btn');
+
+            if (!toAlbumBtn || !hideBtn || !deleteBtn || !cancelBtn) return;
+
+            // Ke Album
+            toAlbumBtn.addEventListener('click', async () => {
+                if (selectedMediaIds.size === 0) return;
+                await bulkAddToAlbum();
+            });
+
+            // Sembunyikan
+            hideBtn.addEventListener('click', async () => {
+                if (selectedMediaIds.size === 0) return;
+
+                showConfirm(
+                    'Sembunyikan Media',
+                    `${selectedMediaIds.size} media akan dipindahkan ke ruang tersembunyi.`,
+                    async () => {
+                        await bulkHideMedia();
+                        document.getElementById('galeri-pro-confirm-modal').classList.add('hidden');
+                    }
+                );
+            });
+
+            // Hapus
+            deleteBtn.addEventListener('click', async () => {
+                if (selectedMediaIds.size === 0) return;
+
+                showConfirm(
+                    'Hapus Media',
+                    `${selectedMediaIds.size} media akan dipindahkan ke sampah.`,
+                    async () => {
+                        for (const mediaId of selectedMediaIds) {
+                            const media = await getFromStore('media', mediaId);
+                            if (media) {
+                                media.deletedAt = Date.now();
+                                await addToStore('trash', media);
+                                await deleteFromStore('media', mediaId);
+                            }
+                        }
+
+                        const total = selectedMediaIds.size;
+
+                        cancelMultiSelect();
+                        loadHomeMedia();
+                        showToast(`${total} media dipindahkan ke sampah`);
+
+                        document.getElementById('galeri-pro-confirm-modal').classList.add('hidden');
+                    }
+                );
+            });
+
+            // Batal
+            cancelBtn.addEventListener('click', () => {
+                cancelMultiSelect();
+            });
+        }
+
+        /* ============================================ */
+        /* CONFIRM MODAL HANDLER */
+        /* ============================================ */
+
+        document.getElementById('galeri-pro-confirm-ok')
+            ?.addEventListener('click', () => {
+                if (confirmCallback) confirmCallback();
+            });
+
+        document.getElementById('galeri-pro-confirm-cancel')
+            ?.addEventListener('click', () => {
+                document.getElementById('galeri-pro-confirm-modal').classList.add('hidden');
+            });
+
+        /* ============================================ */
+        /* PANGGIL INISIALISASI */
+        /* ============================================ */
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initMultiSelectToolbarEvents();
+        });
+
+        async function bulkAddToAlbum() {
+            if (selectedMediaIds.size === 0) return;
+            const albums = await getAllFromStore('albums');
+
+            if (albums.length === 0) {
+                showToast('Belum ada album. Buat album terlebih dahulu.', 'error');
+                return;
+            }
+
+            const list = document.getElementById('galeri-pro-select-album-list');
+            list.innerHTML = albums.map(album => `
+                <div class="galeri-pro-card p-4 cursor-pointer hover:border-indigo-500" onclick="addMultiMediaToAlbum('${album.id}')">
+                    <div class="flex items-center gap-3">
+                        <span class="material-icons-round" style="color: var(--galeri-pro-accent);">folder</span>
+                        <span>${album.name}</span>
+                    </div>
+                </div>
+            `).join('');
+
+            document.getElementById('galeri-pro-select-album-modal').classList.remove('hidden');
+        }
+
+        async function addMultiMediaToAlbum(albumId) {
+            for (const mediaId of selectedMediaIds) {
+                const media = await getFromStore('media', mediaId);
+                if (media) {
+                    media.albumId = albumId;
+                    await updateInStore('media', media);
+                }
+            }
+
+            document.getElementById('galeri-pro-select-album-modal').classList.add('hidden');
+            cancelMultiSelect();
+            showToast(`${selectedMediaIds.size} media ditambahkan ke album`);
+        }
+
+        async function bulkHideMedia() {
+            if (selectedMediaIds.size === 0) return;
+
+            for (const mediaId of selectedMediaIds) {
+                const media = await getFromStore('media', mediaId);
+                if (media) {
+                    await addToStore('hidden', media);
+                    await deleteFromStore('media', mediaId);
+                }
+            }
+
+            cancelMultiSelect();
+            showToast(`${selectedMediaIds.size} media disembunyikan`);
+            loadHomeMedia();
+        }
+
+        async function bulkDeleteMedia() {
+            if (selectedMediaIds.size === 0) return;
+
+            showConfirm('Hapus Media', `${selectedMediaIds.size} media akan dipindahkan ke sampah.`, async () => {
+                for (const mediaId of selectedMediaIds) {
+                    const media = await getFromStore('media', mediaId);
+                    if (media) {
+                        media.deletedAt = Date.now();
+                        media.originalSource = 'media';
+                        await addToStore('trash', media);
+                        await deleteFromStore('media', mediaId);
+                    }
+                }
+
+                cancelMultiSelect();
+                showToast(`${selectedMediaIds.size} media dihapus`);
+                loadHomeMedia();
+            });
+        }
+
+        async function bulkRestoreTrash() {
+            if (selectedTrashIds.size === 0) return;
+
+            for (const mediaId of selectedTrashIds) {
+                const media = await getFromStore('trash', mediaId);
+                if (media) {
+                    const source = media.originalSource || 'media';
+                    delete media.deletedAt;
+                    delete media.originalSource;
+                    await addToStore(source, media);
+                    await deleteFromStore('trash', mediaId);
+                }
+            }
+
+            cancelTrashMultiSelect();
+            showToast(`${selectedTrashIds.size} media dipulihkan`);
+            loadTrash();
+        }
+
+        async function bulkDeleteTrash() {
+            if (selectedTrashIds.size === 0) return;
+
+            showConfirm('Hapus Permanen', `${selectedTrashIds.size} media akan dihapus secara permanen dan tidak dapat dikembalikan.`, async () => {
+                for (const mediaId of selectedTrashIds) {
+                    await deleteFromStore('trash', mediaId);
+                }
+
+                cancelTrashMultiSelect();
+                showToast(`${selectedTrashIds.size} media dihapus permanen`);
+                loadTrash();
+            });
+        }
+
+        /* ============================================ */
+        /* FUNGSI PREVIEW MEDIA */
+        /* ============================================ */
+
+        async function openPreview(mediaId) {
+            let media = await getFromStore('media', mediaId);
+            let source = 'media';
+
+            if (!media) {
+                media = await getFromStore('hidden', mediaId);
+                source = 'hidden';
+            }
+
+            if (!media) {
+                media = await getFromStore('trash', mediaId);
+                source = 'trash';
+            }
+
+            if (!media) return;
+
+            currentPreviewMedia = {
+                ...media,
+                source
+            };
+
+            const content = document.getElementById('galeri-pro-preview-content');
+            const modal = document.getElementById('galeri-pro-preview-modal');
+
+            if (media.type === 'video') {
+                content.innerHTML = `<video src="${media.data}" controls autoplay class="max-w-full max-h-full rounded-xl object-contain"></video>`;
+            } else {
+                content.innerHTML = `<img src="${media.data}" alt="${media.name}" class="max-w-full max-h-full rounded-xl object-contain">`;
+            }
+
+            const hideBtn = document.getElementById('galeri-pro-preview-hide');
+            const albumBtn = document.getElementById('galeri-pro-preview-add-album');
+            const deleteBtn = document.getElementById('galeri-pro-preview-delete');
+
+            if (source === 'trash') {
+                hideBtn.innerHTML = '<span class="material-icons-round">restore</span>';
+                hideBtn.onclick = () => restoreMedia(mediaId);
+                albumBtn.classList.add('hidden');
+                deleteBtn.innerHTML = '<span class="material-icons-round">delete_forever</span>';
+                deleteBtn.onclick = () => permanentDelete(mediaId);
+            } else if (source === 'hidden') {
+                hideBtn.innerHTML = '<span class="material-icons-round">visibility</span>';
+                hideBtn.onclick = () => unhideMedia(mediaId);
+                albumBtn.classList.add('hidden');
+                deleteBtn.onclick = () => deleteMediaRealtime(mediaId, 'hidden');
+            } else {
+                hideBtn.innerHTML = '<span class="material-icons-round">visibility_off</span>';
+                hideBtn.onclick = () => hideMedia(mediaId);
+                albumBtn.classList.remove('hidden');
+                albumBtn.onclick = () => showSelectAlbumModal(mediaId);
+                deleteBtn.innerHTML = '<span class="material-icons-round">delete</span>';
+                deleteBtn.onclick = () => deleteMediaRealtime(mediaId, 'media');
+            }
+
+            modal.classList.remove('hidden');
+        }
+
+        function closePreview() {
+            document.getElementById('galeri-pro-preview-modal').classList.add('hidden');
+            const video = document.querySelector('#galeri-pro-preview-content video');
+            if (video) video.pause();
+            currentPreviewMedia = null;
+        }
+
+        const downloadBtn = document.getElementById('galeri-pro-preview-download');
+
+        downloadBtn.onclick = () => {
+            if (!currentPreviewMedia) return;
+
+            autoDownloadMedia(currentPreviewMedia);
+        };
+
+        document.getElementById('galeri-pro-preview-download')
+            .addEventListener('click', () => {
+                if (!currentPreviewMedia) return;
+                autoDownloadMedia(currentPreviewMedia);
+            });
+
+        /* ============================================ */
+        /* FUNGSI MANAJEMEN MEDIA REAL-TIME */
+        /* ============================================ */
+
+        async function hideMedia(mediaId) {
+            const media = await getFromStore('media', mediaId);
+            if (!media) return;
+
+            await addToStore('hidden', media);
+            await deleteFromStore('media', mediaId);
+
+            closePreview();
+            showToast('Media disembunyikan');
+            loadHomeMedia();
+        }
+
+        async function unhideMedia(mediaId) {
+            const media = await getFromStore('hidden', mediaId);
+            if (!media) return;
+
+            await addToStore('media', media);
+            await deleteFromStore('hidden', mediaId);
+
+            closePreview();
+            showToast('Media ditampilkan');
+            loadHiddenMedia(currentHiddenFolder);
+        }
+
+        async function deleteMediaRealtime(mediaId, source) {
+            const media = await getFromStore(source, mediaId);
+            if (!media) return;
+
+            media.deletedAt = Date.now();
+            media.originalSource = source;
+            await addToStore('trash', media);
+            await deleteFromStore(source, mediaId);
+
+            closePreview();
+            showToast('Media dipindahkan ke sampah');
+
+            if (currentPage === 'home') loadHomeMedia();
+            else if (currentPage === 'album-detail') loadAlbumDetail(currentAlbumId);
+            else if (source === 'hidden') loadHiddenMedia(currentHiddenFolder);
+        }
+
+        async function restoreMedia(mediaId) {
+            const media = await getFromStore('trash', mediaId);
+            if (!media) return;
+
+            const source = media.originalSource || 'media';
+            delete media.deletedAt;
+            delete media.originalSource;
+
+            await addToStore(source, media);
+            await deleteFromStore('trash', mediaId);
+
+            closePreview();
+            showToast('Media dikembalikan');
+            loadTrash();
+        }
+
+        async function permanentDelete(mediaId) {
+            showConfirm('Hapus Permanen', 'Mohon diperhatikan bahwa media ini akan terhapus secara permanen setelah melewati batas waktu 30 hari.', async () => {
+                await deleteFromStore('trash', mediaId);
+                closePreview();
+                showToast('Media dihapus permanen');
+                loadTrash();
+            });
+        }
+
+        /* ============================================ */
+        /* FUNGSI ALBUM */
+        /* ============================================ */
+
+        async function loadAlbums() {
+            const grid = document.getElementById('galeri-pro-albums-grid');
+            const empty = document.getElementById('galeri-pro-albums-empty');
+            const countEl = document.getElementById('galeri-pro-album-count');
+
+            const albums = await getAllFromStore('albums');
+            const media = await getAllFromStore('media');
+
+            countEl.textContent = `${albums.length} album`;
+
+            if (albums.length === 0) {
+                grid.innerHTML = '';
+                empty.classList.remove('hidden');
+                return;
+            }
+
+            empty.classList.add('hidden');
+
+            grid.innerHTML = albums.map(album => {
+                const albumMedia = media.filter(m => m.albumId === album.id);
+                const coverMedia = albumMedia[0];
+
+                return `
+                    <div class="galeri-pro-card overflow-hidden cursor-pointer" onclick="openAlbum('${album.id}')">
+                        <div class="aspect-square relative" style="background: var(--galeri-pro-bg-tertiary);">
+                            ${coverMedia
+                        ? `<img src="${coverMedia.data}" alt="" class="w-full h-full object-cover" loading="lazy">`
+                        : `<div class="w-full h-full flex items-center justify-center">
+                                    <span class="material-icons-round text-5xl" style="color: var(--galeri-pro-text-secondary);">folder</span>
+                                   </div>`
+                    }
+                        </div>
+                        <div class="p-4">
+                            <h4 class="font-semibold truncate">${album.name}</h4>
+                            <p class="text-sm" style="color: var(--galeri-pro-text-secondary);">${albumMedia.length} media</p>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function openAlbum(albumId) {
+            currentAlbumId = albumId;
+            document.querySelectorAll('.galeri-pro-page').forEach(p => p.classList.add('hidden'));
+            document.getElementById('galeri-pro-page-album-detail').classList.remove('hidden');
+            loadAlbumDetail(albumId);
+        }
+
+        async function loadAlbumDetail(albumId) {
+            const album = await getFromStore('albums', albumId);
+            if (!album) return;
+
+            const media = await getAllFromStore('media');
+            const albumMedia = media.filter(m => m.albumId === albumId);
+
+            document.getElementById('galeri-pro-album-media-count').textContent = `${albumMedia.length} media`;
+
+            const grid = document.getElementById('galeri-pro-album-media-grid');
+            const empty = document.getElementById('galeri-pro-album-empty');
+
+            if (albumMedia.length === 0) {
+                grid.innerHTML = '';
+                empty.classList.remove('hidden');
+                return;
+            }
+
+            empty.classList.add('hidden');
+            grid.innerHTML = albumMedia.map(item => renderMediaItem(item)).join('');
+            attachMediaClickHandlers();
+        }
+
+        function showCreateAlbumModal() {
+            editingAlbumId = null;
+            document.getElementById('galeri-pro-album-modal-title').textContent = 'Buat Album Baru';
+            document.getElementById('galeri-pro-album-name-input').value = '';
+            document.getElementById('galeri-pro-album-modal').classList.remove('hidden');
+        }
+
+        async function showEditAlbumModal() {
+            if (!currentAlbumId) return;
+            editingAlbumId = currentAlbumId;
+            const album = await getFromStore('albums', currentAlbumId);
+
+            document.getElementById('galeri-pro-album-edit-name').value = album.name;
+            document.getElementById('galeri-pro-album-edit-modal').classList.remove('hidden');
+        }
+
+        async function saveAlbum() {
+            const name = document.getElementById('galeri-pro-album-name-input').value.trim();
+            if (!name) {
+                showToast('Nama album tidak boleh kosong', 'error');
+                return;
+            }
+
+            await addToStore('albums', {
+                id: generateId(),
+                name,
+                createdAt: Date.now()
+            });
+            showToast('Album berhasil dibuat');
+            loadAlbums();
+
+            document.getElementById('galeri-pro-album-modal').classList.add('hidden');
+        }
+
+        async function saveEditAlbum() {
+            const name = document.getElementById('galeri-pro-album-edit-name').value.trim();
+            if (!name) {
+                showToast('Nama album tidak boleh kosong', 'error');
+                return;
+            }
+
+            const album = await getFromStore('albums', editingAlbumId);
+            album.name = name;
+            await updateInStore('albums', album);
+            showToast('Album berhasil diupdate');
+            loadAlbumDetail(editingAlbumId);
+
+            document.getElementById('galeri-pro-album-edit-modal').classList.add('hidden');
+        }
+
+        async function deleteAlbum() {
+            const media = await getAllFromStore('media');
+            const albumMedia = media.filter(m => m.albumId === editingAlbumId);
+
+            if (albumMedia.length > 0) {
+                showToast('Album harus kosong untuk dihapus. Hapus semua media terlebih dahulu.', 'error');
+                return;
+            }
+
+            showConfirm('Hapus Album', 'Album ini akan dihapus secara permanen.', async () => {
+                await deleteFromStore('albums', editingAlbumId);
+                showToast('Album berhasil dihapus');
+                navigateTo('albums');
+                document.getElementById('galeri-pro-album-edit-modal').classList.add('hidden');
+            });
+        }
+
+        async function showSelectAlbumModal(mediaId) {
+            const albums = await getAllFromStore('albums');
+            const list = document.getElementById('galeri-pro-select-album-list');
+
+            if (albums.length === 0) {
+                list.innerHTML = `
+                    <p class="text-center py-4" style="color: var(--galeri-pro-text-secondary);">Belum ada album. Buat album terlebih dahulu.</p>
+                `;
+            } else {
+                list.innerHTML = albums.map(album => `
+                    <div class="galeri-pro-card p-4 cursor-pointer hover:border-indigo-500" onclick="addToAlbum('${mediaId}', '${album.id}')">
+                        <div class="flex items-center gap-3">
+                            <span class="material-icons-round" style="color: var(--galeri-pro-accent);">folder</span>
+                            <span>${album.name}</span>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            document.getElementById('galeri-pro-select-album-modal').classList.remove('hidden');
+        }
+
+        async function addToAlbum(mediaId, albumId) {
+            const media = await getFromStore('media', mediaId);
+            if (!media) return;
+
+            media.albumId = albumId;
+            await updateInStore('media', media);
+
+            document.getElementById('galeri-pro-select-album-modal').classList.add('hidden');
+            closePreview();
+            showToast('Media ditambahkan ke album');
+        }
+
+        /* ============================================ */
+        /* FUNGSI TERSEMBUNYI */
+        /* ============================================ */
+
+        async function checkHiddenAccess() {
+            const password = await getSetting('hiddenPassword');
+
+            if (!password) {
+                document.getElementById('galeri-pro-hidden-setup').classList.remove('hidden');
+                document.getElementById('galeri-pro-hidden-enter').classList.add('hidden');
+            } else {
+                document.getElementById('galeri-pro-hidden-setup').classList.add('hidden');
+                document.getElementById('galeri-pro-hidden-enter').classList.remove('hidden');
+            }
+
+            if (hiddenLoggedIn) {
+                document.getElementById('galeri-pro-hidden-login').classList.add('hidden');
+                document.getElementById('galeri-pro-hidden-content').classList.remove('hidden');
+                updateHiddenCounts();
+                galeriProStartIdleWatcher();
+            } else {
+                document.getElementById('galeri-pro-hidden-login').classList.remove('hidden');
+                document.getElementById('galeri-pro-hidden-content').classList.add('hidden');
+            }
+        }
+
+        async function setHiddenPassword() {
+            const newPass = document.getElementById('galeri-pro-new-password').value;
+            const confirmPass = document.getElementById('galeri-pro-confirm-password').value;
+
+            if (!newPass || newPass.length < 4) {
+                showToast('Password minimal 4 karakter', 'error');
+                return;
+            }
+
+            if (newPass !== confirmPass) {
+                showToast('Password tidak cocok', 'error');
+                return;
+            }
+
+            await setSetting('hiddenPassword', newPass);
+            hiddenLoggedIn = true;
+            showToast('Password berhasil dibuat');
+            checkHiddenAccess();
+        }
+
+        async function loginHidden() {
+            const password = document.getElementById('galeri-pro-enter-password').value;
+            const savedPassword = await getSetting('hiddenPassword');
+
+            if (password === savedPassword) {
+                hiddenLoggedIn = true;
+                document.getElementById('galeri-pro-login-error').classList.add('hidden');
+                document.getElementById('galeri-pro-enter-password').value = '';
+                checkHiddenAccess();
+            } else {
+                document.getElementById('galeri-pro-login-error').classList.remove('hidden');
+            }
+        }
+
+        /* ===============================
+   AUTO LOGOUT JIKA IDLE (10 DETIK)
+================================= */
+
+        let galeriProIdleTimer = null;
+        const galeriProIdleLimit = 10 * 1000; // 10 detik
+
+        // Cek apakah user sedang login hidden
+        function galeriProIsHiddenLoggedIn() {
+            const hiddenContent = document.getElementById("galeri-pro-hidden-content");
+            return hiddenContent && !hiddenContent.classList.contains("hidden");
+        }
+
+        // Reset timer
+        function galeriProResetIdleTimer() {
+
+            if (!galeriProIsHiddenLoggedIn()) return;
+
+            clearTimeout(galeriProIdleTimer);
+
+            galeriProIdleTimer = setTimeout(() => {
+
+                // Logout
+                document.getElementById("galeri-pro-hidden-content")
+                    ?.classList.add("hidden");
+
+                document.getElementById("galeri-pro-hidden-login")
+                    ?.classList.remove("hidden");
+
+                // Toast (gunakan sistem toast kamu)
+                if (typeof showToast === "function") {
+                    showToast("Anda otomatis logout karena tidak ada aktivitas 10 detik.", "warning");
+                }
+
+            }, galeriProIdleLimit);
+        }
+
+        // Jalankan saat login berhasil
+        function galeriProStartIdleWatcher() {
+            galeriProResetIdleTimer();
+        }
+
+        // Reset timer setiap ada aktivitas
+        ["click", "mousemove", "keydown", "scroll", "touchstart"].forEach(event => {
+            document.addEventListener(event, galeriProResetIdleTimer);
+        });
+
+        function logoutHidden() {
+            hiddenLoggedIn = false;
+            currentHiddenFolder = null;
+            checkHiddenAccess();
+        }
+
+        async function updateHiddenCounts() {
+            const hidden = await getAllFromStore('hidden');
+            const images = hidden.filter(m => m.type === 'image');
+            const videos = hidden.filter(m => m.type === 'video');
+
+            document.getElementById('galeri-pro-hidden-images-count').textContent = `${images.length} gambar`;
+            document.getElementById('galeri-pro-hidden-videos-count').textContent = `${videos.length} video`;
+        }
+
+        async function openHiddenFolder(type) {
+            currentHiddenFolder = type;
+            document.getElementById('galeri-pro-hidden-folder-title').textContent = type === 'image' ? 'Gambar Tersembunyi' : 'Video Tersembunyi';
+            document.getElementById('galeri-pro-hidden-media-container').classList.remove('hidden');
+            loadHiddenMedia(type);
+        }
+
+        async function loadHiddenMedia(type) {
+            const hidden = await getAllFromStore('hidden');
+            const filtered = hidden.filter(m => m.type === type);
+            const grid = document.getElementById('galeri-pro-hidden-media-grid');
+
+            grid.innerHTML = filtered.map(item => renderMediaItem(item)).join('');
+            attachMediaClickHandlers();
+        }
+
+        function backToHiddenFolders() {
+            currentHiddenFolder = null;
+            document.getElementById('galeri-pro-hidden-media-container').classList.add('hidden');
+        }
+
+        /* ============================================ */
+        /* FUNGSI SAMPAH */
+        /* ============================================ */
+
+        async function loadTrash() {
+            const trash = await getAllFromStore('trash');
+            const grid = document.getElementById('galeri-pro-trash-grid');
+            const empty = document.getElementById('galeri-pro-trash-empty');
+
+            const now = Date.now();
+            for (const item of trash) {
+                if (now - item.deletedAt > 30 * 24 * 60 * 60 * 1000) {
+                    await deleteFromStore('trash', item.id);
+                }
+            }
+
+            const updatedTrash = await getAllFromStore('trash');
+
+            if (updatedTrash.length === 0) {
+                grid.innerHTML = '';
+                empty.classList.remove('hidden');
+                return;
+            }
+
+            empty.classList.add('hidden');
+            grid.innerHTML = updatedTrash.map(item => renderMediaItem(item, true)).join('');
+            attachMediaClickHandlers();
+        }
+
+        async function emptyTrash() {
+            const trash = await getAllFromStore('trash');
+            if (trash.length === 0) {
+                showToast('Sampah sudah kosong', 'info');
+                return;
+            }
+
+            showConfirm('Kosongkan Sampah', `${trash.length} media akan dihapus permanen. Tindakan ini tidak dapat dibatalkan.`, async () => {
+                for (const item of trash) {
+                    await deleteFromStore('trash', item.id);
+                }
+                showToast('Sampah dikosongkan');
+                loadTrash();
+            });
+        }
+
+        /* ============================================ */
+        /* FUNGSI PENGATURAN */
+        /* ============================================ */
+
+        async function loadSettings() {
+            const themeGrid = document.getElementById('galeri-pro-theme-grid');
+            const currentTheme = await getSetting('theme') || 'midnight';
+
+            themeGrid.innerHTML = themes.map(theme => `
+                <div class="galeri-pro-card p-3 cursor-pointer transition-all ${currentTheme === theme.id ? 'ring-2 ring-offset-2' : ''}" 
+                     style="${currentTheme === theme.id ? 'ring-color: var(--galeri-pro-accent); ring-offset-color: var(--galeri-pro-bg-primary);' : ''}"
+                     onclick="setTheme('${theme.id}')">
+                    <div class="flex gap-1 mb-2">
+                        <div class="w-6 h-6 rounded" style="background: ${theme.colors[0]};"></div>
+                        <div class="w-6 h-6 rounded" style="background: ${theme.colors[1]};"></div>
+                    </div>
+                    <p class="text-xs font-medium truncate">${theme.name}</p>
+                </div>
+            `).join('');
+
+            const media = await getAllFromStore('media');
+            const hidden = await getAllFromStore('hidden');
+            document.getElementById('galeri-pro-total-media-info').textContent = media.length + hidden.length;
+        }
+
+        async function setTheme(themeId) {
+            document.body.className = `h-full galeri-pro-app theme-${themeId}`;
+            await setSetting('theme', themeId);
+            loadSettings();
+            showToast(`Tema ${themes.find(t => t.id === themeId).name} diterapkan`);
+        }
+
+        /* ============================================ */
+        /* EVENT LISTENERS */
+        /* ============================================ */
+
+        function initEventListeners() {
+            document.querySelectorAll('.galeri-pro-nav-item, .galeri-pro-mobile-nav-item').forEach(item => {
+                item.addEventListener('click', () => navigateTo(item.dataset.page));
+            });
+
+            document.getElementById('galeri-pro-upload-input').addEventListener('change', (e) => {
+                handleUpload(e.target.files);
+                e.target.value = '';
+            });
+
+            document.querySelectorAll('.galeri-pro-upload-trigger').forEach(input => {
+                input.addEventListener('change', (e) => {
+                    handleUpload(e.target.files);
+                    e.target.value = '';
+                });
+            });
+
+            document.getElementById('galeri-pro-album-upload').addEventListener('change', (e) => {
+                handleUpload(e.target.files, currentAlbumId);
+                e.target.value = '';
+            });
+
+            document.getElementById('galeri-pro-filter').addEventListener('change', loadHomeMedia);
+
+            document.getElementById('galeri-pro-close-preview').addEventListener('click', closePreview);
+            document.getElementById('galeri-pro-preview-backdrop').addEventListener('click', closePreview);
+
+            document.getElementById('galeri-pro-create-album-btn').addEventListener('click', showCreateAlbumModal);
+            document.querySelectorAll('.galeri-pro-create-album-trigger').forEach(btn => {
+                btn.addEventListener('click', showCreateAlbumModal);
+            });
+            document.getElementById('galeri-pro-back-to-albums').addEventListener('click', () => navigateTo('albums'));
+            document.getElementById('galeri-pro-edit-album-btn').addEventListener('click', showEditAlbumModal);
+            document.getElementById('galeri-pro-album-modal-cancel').addEventListener('click', () => {
+                document.getElementById('galeri-pro-album-modal').classList.add('hidden');
+            });
+            document.getElementById('galeri-pro-album-modal-backdrop').addEventListener('click', () => {
+                document.getElementById('galeri-pro-album-modal').classList.add('hidden');
+            });
+            document.getElementById('galeri-pro-album-modal-save').addEventListener('click', saveAlbum);
+
+            document.getElementById('galeri-pro-album-edit-cancel').addEventListener('click', () => {
+                document.getElementById('galeri-pro-album-edit-modal').classList.add('hidden');
+            });
+            document.getElementById('galeri-pro-album-edit-backdrop').addEventListener('click', () => {
+                document.getElementById('galeri-pro-album-edit-modal').classList.add('hidden');
+            });
+            document.getElementById('galeri-pro-album-edit-save').addEventListener('click', saveEditAlbum);
+            document.getElementById('galeri-pro-album-delete-btn').addEventListener('click', deleteAlbum);
+
+            document.getElementById('galeri-pro-select-album-cancel').addEventListener('click', () => {
+                document.getElementById('galeri-pro-select-album-modal').classList.add('hidden');
+            });
+            document.getElementById('galeri-pro-select-album-backdrop').addEventListener('click', () => {
+                document.getElementById('galeri-pro-select-album-modal').classList.add('hidden');
+            });
+
+            document.getElementById('galeri-pro-multiselect-toolbar').addEventListener('click', (e) => {
+                if (e.target.id === 'galeri-pro-select-to-album-btn') bulkAddToAlbum();
+                if (e.target.id === 'galeri-pro-select-hide-btn') bulkHideMedia();
+                if (e.target.id === 'galeri-pro-select-delete-btn') bulkDeleteMedia();
+                if (e.target.id === 'galeri-pro-select-cancel-btn') cancelMultiSelect();
+            });
+
+            document.getElementById('galeri-pro-trash-restore-btn')
+                .addEventListener('click', bulkRestoreTrash);
+
+            document.getElementById('galeri-pro-trash-delete-btn')
+                .addEventListener('click', bulkDeleteTrash);
+
+            document.getElementById('galeri-pro-trash-cancel-btn')
+                .addEventListener('click', cancelTrashMultiSelect);
+
+            document.getElementById('galeri-pro-trash-multiselect-toolbar')
+                .addEventListener('click', (e) => {
+
+                    const restoreBtn = e.target.closest('#galeri-pro-trash-restore-btn');
+                    const deleteBtn = e.target.closest('#galeri-pro-trash-delete-btn');
+                    const cancelBtn = e.target.closest('#galeri-pro-trash-cancel-btn');
+
+                    if (restoreBtn) {
+                        bulkRestoreTrash();
+                        return;
+                    }
+
+                    if (deleteBtn) {
+                        bulkDeleteTrash();
+                        return;
+                    }
+
+                    if (cancelBtn) {
+                        cancelTrashMultiSelect();
+                        return;
+                    }
+                });
+
+            document.getElementById('galeri-pro-set-password-btn').addEventListener('click', setHiddenPassword);
+            document.getElementById('galeri-pro-login-hidden-btn').addEventListener('click', loginHidden);
+            document.getElementById('galeri-pro-logout-hidden').addEventListener('click', logoutHidden);
+            document.getElementById('galeri-pro-hidden-images-folder').addEventListener('click', () => openHiddenFolder('image'));
+            document.getElementById('galeri-pro-hidden-videos-folder').addEventListener('click', () => openHiddenFolder('video'));
+            document.getElementById('galeri-pro-back-to-hidden-folders').addEventListener('click', backToHiddenFolders);
+
+            document.getElementById('galeri-pro-enter-password').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') loginHidden();
+            });
+
+            document.getElementById('galeri-pro-empty-trash-btn').addEventListener('click', emptyTrash);
+
+            document.getElementById('galeri-pro-confirm-cancel').addEventListener('click', () => {
+                document.getElementById('galeri-pro-confirm-modal').classList.add('hidden');
+            });
+            document.getElementById('galeri-pro-confirm-backdrop').addEventListener('click', () => {
+                document.getElementById('galeri-pro-confirm-modal').classList.add('hidden');
+            });
+            document.getElementById('galeri-pro-confirm-ok').addEventListener('click', () => {
+                document.getElementById('galeri-pro-confirm-modal').classList.add('hidden');
+                if (confirmCallback) confirmCallback();
+            });
+        }
+
+        /* ============================================ */
+        /* INISIALISASI APLIKASI */
+        /* ============================================ */
+
+        async function initApp() {
+            const loadingBar = document.getElementById('galeri-pro-loading-bar');
+
+            loadingBar.style.width = '30%';
+
+            await openDatabase();
+            loadingBar.style.width = '60%';
+
+            const savedTheme = await getSetting('theme') || 'midnight';
+            document.body.className = `h-full galeri-pro-app theme-${savedTheme}`;
+            loadingBar.style.width = '80%';
+
+            initEventListeners();
+            loadingBar.style.width = '100%';
+
+            setTimeout(() => {
+                document.getElementById('galeri-pro-loading').classList.add('hidden');
+                document.getElementById('galeri-pro-main').classList.remove('hidden');
+                navigateTo('home');
+            }, 500);
+        }
+
+        /* ============================================ */
+        /* INISIALISASI SDK CANVA */
+        /* ============================================ */
+
+        const defaultConfig = {
+            app_title: 'Galeri Pro+'
+        };
+
+        if (window.elementSdk) {
+            window.elementSdk.init({
+                defaultConfig,
+                onConfigChange: async (config) => {
+                    const title = config.app_title || defaultConfig.app_title;
+                    document.getElementById('galeri-pro-app-title').textContent = title;
+                    document.title = title;
+                },
+                mapToCapabilities: (config) => ({
+                    recolorables: [],
+                    borderables: [],
+                    fontEditable: undefined,
+                    fontSizeable: undefined
+                }),
+                mapToEditPanelValues: (config) => new Map([
+                    ['app_title', config.app_title || defaultConfig.app_title]
+                ])
+            });
+        }
+
+        initApp();
+    </script>
+    <script>
+        (function () { function c() { var b = a.contentDocument || a.contentWindow.document; if (b) { var d = b.createElement('script'); d.innerHTML = "window.__CF$cv$params={r:'9cecf3ab462540a2',t:'MTc3MTI0MzkzMS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);"; b.getElementsByTagName('head')[0].appendChild(d) } } if (document.body) { var a = document.createElement('iframe'); a.height = 1; a.width = 1; a.style.position = 'absolute'; a.style.top = 0; a.style.left = 0; a.style.border = 'none'; a.style.visibility = 'hidden'; document.body.appendChild(a); if ('loading' !== document.readyState) c(); else if (window.addEventListener) document.addEventListener('DOMContentLoaded', c); else { var e = document.onreadystatechange || function () { }; document.onreadystatechange = function (b) { e(b); 'loading' !== document.readyState && (document.onreadystatechange = e, c()) } } } })(); function autoDownloadMedia(media) {
+            const link = document.createElement('a');
+            link.href = media.data;
+            link.download = media.name || 'download';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            showToast('Media sedang diunduh');
+        }
+    </script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js');
+            });
+        }
+
+        let deferredPrompt;
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+
+            document.getElementById('pwa-install-modal')
+                .classList.remove('hidden');
+        });
+
+        function installPWA() {
+            if (!deferredPrompt) return;
+
+            deferredPrompt.prompt();
+
+            deferredPrompt.userChoice.then(() => {
+                deferredPrompt = null;
+                document.getElementById('pwa-install-modal')
+                    .classList.add('hidden');
+            });
+        }
+    </script>
+</body>
+
+</html>
